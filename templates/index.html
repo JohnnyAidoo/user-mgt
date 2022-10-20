@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Amatic+SC:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <header>
+        <div id="logo">
+            LOGO
+        </div>
+        <div>
+            <input type="text" name="serch" id="serchbar" placeholder="search">
+        </div>
+    </header>
+    <div id="main">
+        <div id="content">
+            <h3>number</h3>
+            <h3>Date</h3>
+            <h3>Name</h3>
+            <h3>File Number</h3>
+            <h3>Block Name</h3>
+            <h3>Price of File</h3>
+            <h3>M.Number</h3>
+            <h3>Pofit</h3>
+            <div class="emp"></div>
+            <div class="emp"></div>
+        </div>
+    </div>
+    {%for user in users%}
+        <div id="users">
+            <li>{{user.id}}</li>
+            <li>{{user.date}}</li>
+            <li>{{user.userName}}</li>
+            <li>{{user.fileNumber}}</li>
+            <li>{{user.blockName}}</li>
+            <li><span>$</span>{{user.price}}</li>
+            <li>{{user.mobileNumber}}</li>
+            <li><span>$</span>{{user.profit}}</li>
+            <a href="#">update</a>
+            <a href="#" id="delete">delete</a>
+        </div>
+    {%endfor%}
+
+    <a href="/adduser" id="addnew"> add new</a>
+</body>
+</html>
