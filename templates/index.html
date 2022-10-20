@@ -42,6 +42,9 @@
             <div class="emp"></div>
         </div>
     </div>
+    {%for mess in get_flashed_messages()%}
+    {{mess}}
+    {%endfor%}
     {%for user in users%}
         <div id="users">
             <li>{{user.id}}</li>
@@ -52,8 +55,8 @@
             <li><span>$</span>{{user.price}}</li>
             <li>{{user.mobileNumber}}</li>
             <li><span>$</span>{{user.profit}}</li>
-            <a href="#">update</a>
-            <a href="#" id="delete">delete</a>
+            <a href="/update/{{ user.id }}">update</a>
+            <a href="/delete/{{ user.id }}" id="delete">delete</a>
         </div>
     {%endfor%}
 

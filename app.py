@@ -34,6 +34,7 @@ def home():
 def adduser():
     return render_template('add.html')
 
+
 @app.route('/add', methods=['POST', 'GET'])
 def add():
     if request.method == 'POST':
@@ -43,12 +44,26 @@ def add():
         price=request.form.get('price')
         mobileNumber=request.form.get('mobileNumber')
         profit=request.form.get('profit')
-
+        
         newUser = User(userName=userName, fileNumber=fileNumber, blockName=blockName, price=price,mobileNumber=mobileNumber,profit=profit)
         db.session.add(newUser)
         db.session.commit()
         return redirect(url_for('home'))
 
+@app.route('/update/<int:user_id>')
+def update(user_id):
+    entry = User.query.filter_by(id=user_id).first()
+    db.session.delete(entry)
+    db.session.commit()
+    return redirect(url_for('adduser'))
+
+@app.route('/delete/<int:user_id>')
+def delete(user_id):
+    entry = User.query.filter_by(id=user_id).first()
+    db.session.delete(entry)
+    db.session.commit()
+    return redirect(url_for('home'))
+    
 
 
 if __name__ == '__main__':
