@@ -1,8 +1,9 @@
+import json
 from flask import Flask ,flash, render_template, request, redirect,url_for
 from flask_login import UserMixin, LoginManager,login_required,logout_user,login_user
+from werkzeug.security import generate_password_hash ,check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 import datetime
-import time 
 
 app = Flask(__name__)
 
@@ -31,18 +32,21 @@ class User(db.Model):
     
 
 
-
 @app.route('/registerPassword', methods=['POST', 'GET'])
 def register():
     if request.method == 'POST':
         old_password = request.form.get('old_password')
         password = request.form.get('password')
-
-        newpass = Auth(passcode=password)
-        db.session.add(newpass)
-        db.session.commit()
-        flash('passwrd changed succesfully', category='success')            
-        return redirect(url_for('home'))
+        old = Auth.query.filter_by(passcode = old_password).first()
+        if old:
+            db.session.delete(old)
+            db.session.commit()
+            new = Auth(passcode = password)
+            db.session.add(new)
+            db.session.commit()
+            flash('passcode changed succesfully', category='success')            
+            return redirect(url_for('home'))
+        else:flash('acces denied', category='error')
     return render_template('registerPasword.html')
 
 @app.route('/login', methods=['POST','GET'])
@@ -50,12 +54,15 @@ def login():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        passw = Auth.query.get().last()
-        flash(passw.passcode)
-        if password == passw.passcode:
-            return redirect(url_for('dashboard'))
-        elif password == 'IAMADMIN':
+        passco = Auth.query.filter_by(passcode=password).first()
+
+        if password == 'IAMADMIN':
             return redirect(url_for('register'))
+        elif not passco:
+            flash('Incorrect credintials')
+            return render_template('login.html')
+        elif password:
+            return redirect(url_for('dashboard'))
         else:
             flash('Incorrect credentials')
             return render_template('login.html')                
@@ -63,7 +70,6 @@ def login():
 
 
 @app.route('/logout')
-
 def logout():
     return redirect(url_for('login'))
 
