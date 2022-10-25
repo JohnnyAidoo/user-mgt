@@ -1,8 +1,8 @@
-from email.policy import default
 from flask import Flask ,flash, render_template, request, redirect,url_for
+from flask_login import UserMixin, LoginManager,login_required,logout_user,login_user
 from flask_sqlalchemy import SQLAlchemy
 import datetime
-
+import time 
 
 app = Flask(__name__)
 
@@ -10,6 +10,13 @@ db = SQLAlchemy(app)
 
 app.secret_key = 'djehhejed'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+
+
+
+class Auth(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key = True)
+    passcode = db.Column(db.String)
+    
 
 
 class User(db.Model):
@@ -25,10 +32,51 @@ class User(db.Model):
 
 
 
+@app.route('/registerPassword', methods=['POST', 'GET'])
+def register():
+    if request.method == 'POST':
+        old_password = request.form.get('old_password')
+        password = request.form.get('password')
+
+        newpass = Auth(passcode=password)
+        db.session.add(newpass)
+        db.session.commit()
+        flash('passwrd changed succesfully', category='success')            
+        return redirect(url_for('home'))
+    return render_template('registerPasword.html')
+
+@app.route('/login', methods=['POST','GET'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        passw = Auth.query.get().last()
+        flash(passw.passcode)
+        if password == passw.passcode:
+            return redirect(url_for('dashboard'))
+        elif password == 'IAMADMIN':
+            return redirect(url_for('register'))
+        else:
+            flash('Incorrect credentials')
+            return render_template('login.html')                
+    return render_template('login.html')
+
+
+@app.route('/logout')
+
+def logout():
+    return redirect(url_for('login'))
+
 @app.route('/')
 def home():
+    return render_template('login.html')
+
+
+@app.route('/dashboard')
+def dashboard():
     users = User.query.all()
     return render_template('index.html' , users=users)
+
 
 @app.route('/adduser')
 def adduser():
@@ -44,11 +92,10 @@ def add():
         price=request.form.get('price')
         mobileNumber=request.form.get('mobileNumber')
         profit=request.form.get('profit')
-        
         newUser = User(userName=userName, fileNumber=fileNumber, blockName=blockName, price=price,mobileNumber=mobileNumber,profit=profit)
         db.session.add(newUser)
         db.session.commit()
-        return redirect(url_for('home'))
+        return redirect(url_for('dashboard'))
 
 @app.route('/update/<int:user_id>')
 def update(user_id):
@@ -62,9 +109,8 @@ def delete(user_id):
     entry = User.query.filter_by(id=user_id).first()
     db.session.delete(entry)
     db.session.commit()
-    return redirect(url_for('home'))
+    return redirect(url_for('dashboard'))
     
-
 
 if __name__ == '__main__':
     db.create_all()

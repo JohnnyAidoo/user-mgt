@@ -25,7 +25,7 @@
             LOGO
         </div>
         <div>
-            <input type="text" name="serch" id="serchbar" placeholder="search">
+            <a href="/logout">LOG OUT</a>
         </div>
     </header>
     <div id="main">
@@ -41,10 +41,7 @@
             <div class="emp"></div>
             <div class="emp"></div>
         </div>
-    </div>
-    {%for mess in get_flashed_messages()%}
-    {{mess}}
-    {%endfor%}
+    </div>  
     {%for user in users%}
         <div id="users">
             <li>{{user.id}}</li>

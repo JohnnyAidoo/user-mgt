@@ -38,6 +38,17 @@ li{
     margin-bottom: 5px;
     border: solid 1px;  
 }
+#cancel{
+    width: 100%;
+    display: flex;
+    justify-content: left;
+    align-items: flex-start;
+}
+.cancel{
+    border-radius: 5    0%;
+    padding: 15px;
+    background-color: crimson;
+}
 button{
     position: absolute;
     bottom: 0;
@@ -101,4 +112,34 @@ input{
     background-color: rgba(0, 0, 0, 0.2);
     width: 50%;
     height: 10%;
+}
+#register{
+    padding: 0;
+    margin: 0;
+    background-color: rgba(0, 0, 15, 0.1);
+    display: flex;
+    flex-direction: column;
+    width: 98vw;
+    height: 98vh;
+    justify-content: center;
+    align-items: center;
+}
+#reg{
+    color: aliceblue;
+    background: linear-gradient(to bottom, blue,darkblue);
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+
+}
+#regs{
+    cursor: white;
+    color: aliceblue;
+}
+
+
+@media screen and (max-width:768px) {
+    form{
+        width: 90%;
+    }
 }
